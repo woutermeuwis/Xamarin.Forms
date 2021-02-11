@@ -238,7 +238,9 @@ namespace Xamarin.Forms.Platform.Android
 			var diffY = interceptPoint.Y - _initialPoint.Y;
 			var aDiffY = Math.Abs(diffY);
 
-			if (aDiffX >= SwipeMinimumDelta || aDiffY >= SwipeMinimumDelta)
+			var swipeMinimumDelta = 1.0f;
+
+			if (aDiffX >= swipeMinimumDelta || aDiffY >= swipeMinimumDelta)
 			{
 				SwipeDirection swipeDirection;
 
