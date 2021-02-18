@@ -30,8 +30,7 @@ namespace Sample
 		void RegisterLegacyRendererAgainstFormsControl()
 		{
 #if MONOANDROID && !NET6_0
-
-			// register renderer with old registrar so it can get shimmed
+			// Register renderer with old registrar so it can get shimmed
 			// This will move to some extension method
 			Xamarin.Forms.Internals.Registrar.Registered.Register(
 				typeof(Xamarin.Forms.Button),
@@ -40,8 +39,7 @@ namespace Sample
 			// This registers the shim against the handler registrar
 			// So when the handler.registrar returns the RendererToHandlerShim
 			// Which will then forward the request to the old registrar
-			Registrar.Handlers.Register<Xamarin.Forms.Button, RendererToHandlerShim>();
-
+			RegistrarHandlers.Handlers.Register<Xamarin.Forms.Button, RendererToHandlerShim>();
 #endif
 		}
 	}
