@@ -19,17 +19,17 @@ namespace Sample
 			RegistrarHandlers.Handlers.Register<Label, LabelHandler>();
 			RegistrarHandlers.Handlers.Register<ProgressBar, ProgressBarHandler>();
 			RegistrarHandlers.Handlers.Register<Slider, SliderHandler>();
-
 			RegistrarHandlers.Handlers.Register<VerticalStackLayout, LayoutHandler>();
 			RegistrarHandlers.Handlers.Register<HorizontalStackLayout, LayoutHandler>();
 			RegistrarHandlers.Handlers.Register<FlexLayout, LayoutHandler>();
 			RegistrarHandlers.Handlers.Register<Xamarin.Forms.StackLayout, LayoutHandler>();
+			RegistrarHandlers.Handlers.Register<Switch, SwitchHandler>();
 		}
 
 
 		void RegisterLegacyRendererAgainstFormsControl()
 		{
-#if MONOANDROID
+#if MONOANDROID && !NET6_0
 			// register renderer with old registrar so it can get shimmed
 			// This will move to some extension method
 			Xamarin.Forms.Internals.Registrar.Registered.Register(

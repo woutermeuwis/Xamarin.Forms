@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using Windows.Foundation;
+using Microsoft.UI.Text;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Documents;
 using Windows.UI.Text;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Automation.Peers;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Documents;
 using Xamarin.Forms.Platform.UAP;
 using Xamarin.Forms.Platform.UAP.Extensions;
 using Xamarin.Forms.PlatformConfiguration.WindowsSpecific;
 using Specifics = Xamarin.Forms.PlatformConfiguration.WindowsSpecific.Label;
 using WRect = Windows.Foundation.Rect;
-using WThickness = Windows.UI.Xaml.Thickness;
+using WThickness = Microsoft.UI.Xaml.Thickness;
 
 namespace Xamarin.Forms.Platform.UWP
 {
@@ -28,9 +27,7 @@ namespace Xamarin.Forms.Platform.UWP
 				run.Foreground = span.TextColor.ToBrush();
 
 			if (!span.IsDefault())
-#pragma warning disable 618
-				run.ApplyFont(span.Font);
-#pragma warning restore 618
+				run.ApplyFont(span);
 
 			if (span.IsSet(Span.TextDecorationsProperty))
 				run.TextDecorations = (Windows.UI.Text.TextDecorations)span.TextDecorations;
@@ -63,6 +60,10 @@ namespace Xamarin.Forms.Platform.UWP
 
 		//	return new TextBlockAutomationPeer(Control);
 		//}
+
+		public LabelRenderer()
+		{
+		}
 
 		protected override Windows.Foundation.Size ArrangeOverride(Windows.Foundation.Size finalSize)
 		{
@@ -166,7 +167,7 @@ namespace Xamarin.Forms.Platform.UWP
 				UpdateColor(Control);
 			else if (e.PropertyName == Label.HorizontalTextAlignmentProperty.PropertyName || e.PropertyName == Label.VerticalTextAlignmentProperty.PropertyName)
 				UpdateAlign(Control);
-			else if (e.PropertyName == Label.FontProperty.PropertyName)
+			else if (e.PropertyName == Label.FontAttributesProperty.PropertyName || e.PropertyName == Label.FontFamilyProperty.PropertyName || e.PropertyName == Label.FontSizeProperty.PropertyName)
 				UpdateFont(Control);
 			else if (e.PropertyName == Label.TextDecorationsProperty.PropertyName)
 				UpdateTextDecorations(Control);
@@ -184,7 +185,7 @@ namespace Xamarin.Forms.Platform.UWP
 				UpdateMaxLines(Control);
 			else if (e.PropertyName == Label.PaddingProperty.PropertyName)
 				UpdatePadding(Control);
-				
+
 			base.OnElementPropertyChanged(sender, e);
 		}
 
@@ -263,11 +264,11 @@ namespace Xamarin.Forms.Platform.UWP
 			if (label == null || (label.IsDefault() && !_fontApplied))
 				return;
 
-#pragma warning disable 618
-			Font fontToApply = label.IsDefault() && _isInitiallyDefault ? Font.SystemFontOfSize(NamedSize.Medium) : label.Font;
-#pragma warning restore 618
+			if (label.IsDefault() && _isInitiallyDefault)
+				textBlock.ApplyFont(Font.SystemFontOfSize(NamedSize.Medium));
+			else
+				textBlock.ApplyFont(label);
 
-			textBlock.ApplyFont(fontToApply);
 			_fontApplied = true;
 		}
 

@@ -24,13 +24,6 @@ namespace Xamarin.Forms.Platform.Android
 		{
 		}
 
-		[Obsolete("This constructor is obsolete as of version 2.5. Please use EntryRenderer(Context) instead.")]
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public EntryRenderer()
-		{
-			AutoPackage = false;
-		}
-
 		protected override FormsEditText CreateNativeControl()
 		{
 			return new FormsEditText(Context);
@@ -77,13 +70,6 @@ namespace Xamarin.Forms.Platform.Android
 		protected abstract EditText EditText { get; }
 
 		public EntryRendererBase(Context context) : base(context)
-		{
-			AutoPackage = false;
-		}
-
-		[Obsolete("This constructor is obsolete as of version 2.5. Please use EntryRenderer(Context) instead.")]
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		internal EntryRendererBase()
 		{
 			AutoPackage = false;
 		}
@@ -205,12 +191,20 @@ namespace Xamarin.Forms.Platform.Android
 
 			if (disposing)
 			{
-				if (EditText != null && EditText is IFormsEditText formsEditContext)
+				if (EditText != null)
 				{
-					formsEditContext.OnKeyboardBackPressed -= OnKeyboardBackPressed;
-					formsEditContext.SelectionChanged -= SelectionChanged;
-					ListenForCloseBtnTouch(false);
+					EditText.RemoveTextChangedListener(this);
+					EditText.SetOnEditorActionListener(null);
+
+					if (EditText is IFormsEditText formsEditContext)
+					{
+						formsEditContext.OnKeyboardBackPressed -= OnKeyboardBackPressed;
+						formsEditContext.SelectionChanged -= SelectionChanged;
+
+						ListenForCloseBtnTouch(false);
+					}
 				}
+
 				_clearBtn = null;
 			}
 

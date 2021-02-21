@@ -15,13 +15,10 @@ namespace Xamarin.Forms.Platform.MacOS
 	public static class FormattedStringExtensions
 	{
 		public static NSAttributedString ToAttributed(this Span span, Font defaultFont, Color defaultForegroundColor)
-		{ 
+		{
 			if (span == null)
 				return null;
-	
-#pragma warning disable 0618 //retaining legacy call to obsolete code
-			var font = span.Font != Font.Default ? span.Font : defaultFont;
-#pragma warning restore 0618
+
 			var fgcolor = span.TextColor;
 			if (fgcolor.IsDefault)
 				fgcolor = defaultForegroundColor;
@@ -29,10 +26,10 @@ namespace Xamarin.Forms.Platform.MacOS
 				fgcolor = ColorExtensions.LabelColor.ToColor();
 
 #if __MOBILE__
-			return new NSAttributedString(span.Text, font == Font.Default ? null : font.ToUIFont(), fgcolor.ToUIColor(), 
+			return new NSAttributedString(span.Text, null, fgcolor.ToUIColor(),
 				span.BackgroundColor.ToUIColor(), kerning: (float)span.CharacterSpacing);
 #else
-			return new NSAttributedString(span.Text, font == Font.Default ? null : font.ToNSFont(), fgcolor.ToNSColor(),
+			return new NSAttributedString(span.Text, null, fgcolor.ToNSColor(),
 				span.BackgroundColor.ToNSColor(), kerningAdjustment: (float)span.CharacterSpacing);
 #endif
 		}
@@ -54,7 +51,7 @@ namespace Xamarin.Forms.Platform.MacOS
 
 			return attributed;
 		}
-		
+
 		internal static NSAttributedString ToAttributed(this Span span, BindableObject owner, Color defaultForegroundColor, TextAlignment textAlignment, double lineHeight = -1.0)
 		{
 			if (span == null)
@@ -109,14 +106,17 @@ namespace Xamarin.Forms.Platform.MacOS
 			if (owner is Entry && !fgcolor.IsDefault)
 				fgcolor = defaultForegroundColor;
 
+#if __MOBILE__
 			if (fgcolor.IsDefault)
 				fgcolor = ColorExtensions.LabelColor.ToColor();
-#if __MOBILE__
 			UIColor spanFgColor;
 			UIColor spanBgColor;
 			spanFgColor = fgcolor.ToUIColor();
 			spanBgColor = span.BackgroundColor.ToUIColor();
 #else
+
+			if (fgcolor.IsDefault)
+				fgcolor = ColorExtensions.LabelColor.ToColor(NSColorSpace.GenericRGBColorSpace);
 			NSColor spanFgColor;
 			NSColor spanBgColor;
 			spanFgColor = fgcolor.ToNSColor();

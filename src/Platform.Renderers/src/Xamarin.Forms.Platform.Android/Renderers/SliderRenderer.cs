@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel;
 using Android.Content;
 using Android.Content.Res;
@@ -17,15 +16,9 @@ namespace Xamarin.Forms.Platform.Android
 		ColorFilter defaultthumbcolorfilter;
 		Drawable defaultthumb;
 		PorterDuff.Mode defaultprogresstintmode, defaultprogressbackgroundtintmode;
+		bool _isDisposed;
 
 		public SliderRenderer(Context context) : base(context)
-		{
-			AutoPackage = false;
-		}
-
-		[Obsolete("This constructor is obsolete as of version 2.5. Please use SliderRenderer(Context) instead.")]
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public SliderRenderer()
 		{
 			AutoPackage = false;
 		}
@@ -100,7 +93,7 @@ namespace Xamarin.Forms.Platform.Android
 			get { return Control; }
 		}
 
-		[PortHandler("Mapped Minimum, Maximum and Value properties")]
+		[PortHandler]
 		protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			if (this.IsDisposed())
@@ -222,6 +215,24 @@ namespace Xamarin.Forms.Platform.Android
 			int thumbTop = seekbar.Height / 2 - thumb.IntrinsicHeight / 2;
 
 			thumb.SetBounds(thumb.Bounds.Left, thumbTop, thumb.Bounds.Left + thumb.IntrinsicWidth, thumbTop + thumb.IntrinsicHeight);
+		}
+
+		protected override void Dispose(bool disposing)
+		{
+			if (_isDisposed)
+				return;
+
+			_isDisposed = true;
+
+			if (disposing)
+			{
+				if (Control.IsAlive())
+				{
+					Control.SetOnSeekBarChangeListener(null);
+				}
+			}
+
+			base.Dispose(disposing);
 		}
 	}
 }

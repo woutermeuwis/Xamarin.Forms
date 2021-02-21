@@ -1,10 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Android.Content;
-using Android.Content.Res;
-using Android.Graphics;
 using Android.OS;
 using Android.Text;
 using Android.Text.Method;
@@ -12,7 +9,6 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using Xamarin.Platform;
-using AView = Android.Views.View;
 
 namespace Xamarin.Forms.Platform.Android
 {
@@ -23,15 +19,9 @@ namespace Xamarin.Forms.Platform.Android
 		TextColorSwitcher _textColorSwitcher;
 		TextColorSwitcher _hintColorSwitcher;
 		float _defaultHeight => Context.ToPixels(42);
+		bool _isDisposed;
 
 		public SearchBarRenderer(Context context) : base(context)
-		{
-			AutoPackage = false;
-		}
-
-		[Obsolete("This constructor is obsolete as of version 2.5. Please use SearchBarRenderer(Context) instead.")]
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public SearchBarRenderer()
 		{
 			AutoPackage = false;
 		}
@@ -348,6 +338,25 @@ namespace Xamarin.Forms.Platform.Android
 			// or to filter out input types you don't want to allow
 			// (e.g., inputTypes &= ~InputTypes.NumberFlagSigned to disallow the sign)
 			return LocalizedDigitsKeyListener.Create(inputTypes);
+		}
+
+		protected override void Dispose(bool disposing)
+		{
+			if (_isDisposed)
+				return;
+
+			_isDisposed = true;
+
+			if (disposing)
+			{
+				if (Control.IsAlive())
+				{
+					Control.SetOnQueryTextListener(null);
+					Control.SetOnQueryTextFocusChangeListener(null);
+				}
+			}
+
+			base.Dispose(disposing);
 		}
 	}
 }

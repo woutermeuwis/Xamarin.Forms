@@ -13,9 +13,6 @@ using AView = Android.Views.View;
 namespace Xamarin.Forms.Platform.Android.AppCompat
 {
 	internal class Platform : BindableObject, IPlatformLayout, INavigation, IDisposable
-#pragma warning disable CS0618
-		, IPlatform
-#pragma warning restore
 	{
 		readonly Context _context;
 		readonly PlatformRenderer _renderer;
@@ -193,12 +190,6 @@ namespace Xamarin.Forms.Platform.Android.AppCompat
 			UpdateAccessibilityImportance(CurrentPageController as Page, ImportantForAccessibility.NoHideDescendants, false);
 
 			_navModel.PushModal(modal);
-
-#pragma warning disable CS0618 // Type or member is obsolete
-			// The Platform property is no longer necessary, but we have to set it because some third-party
-			// library might still be retrieving it and using it
-			modal.Platform = this;
-#pragma warning restore CS0618 // Type or member is obsolete
 
 			Task presentModal = PresentModal(modal, animated);
 
@@ -720,15 +711,6 @@ namespace Xamarin.Forms.Platform.Android.AppCompat
 
 		#endregion
 
-		#region Obsolete 
-
-		SizeRequest IPlatform.GetNativeSize(VisualElement view, double widthConstraint, double heightConstraint)
-		{
-			return GetNativeSize(view, widthConstraint, heightConstraint);
-		}
-
-		#endregion
-
 		internal class DefaultRenderer : VisualElementRenderer<View>, ILayoutChanges
 		{
 			public bool NotReallyHandled { get; private set; }
@@ -736,12 +718,6 @@ namespace Xamarin.Forms.Platform.Android.AppCompat
 			IOnTouchListener _touchListener;
 			bool _disposed;
 			bool _hasLayoutOccurred;
-
-			[Obsolete("This constructor is obsolete as of version 2.5. Please use DefaultRenderer(Context) instead.")]
-			[EditorBrowsable(EditorBrowsableState.Never)]
-			public DefaultRenderer()
-			{
-			}
 
 			readonly MotionEventHelper _motionEventHelper = new MotionEventHelper();
 
@@ -837,16 +813,6 @@ namespace Xamarin.Forms.Platform.Android.AppCompat
 			}
 
 			bool ILayoutChanges.HasLayoutOccurred => _hasLayoutOccurred;
-
-			protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
-			{
-				if (Element is Layout layout)
-				{
-					layout.ResolveLayoutChanges();
-				}
-
-				base.OnMeasure(widthMeasureSpec, heightMeasureSpec);
-			}
 
 			protected override void OnLayout(bool changed, int left, int top, int right, int bottom)
 			{

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Graphics.Canvas.Text;
+using Microsoft.UI.Text;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Documents;
+using Microsoft.UI.Xaml.Media;
 using Windows.UI.Text;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
 using Xamarin.Forms.Internals;
 using IOPath = System.IO.Path;
-using WApplication = Windows.UI.Xaml.Application;
+using WApplication = Microsoft.UI.Xaml.Application;
 
 namespace Xamarin.Forms.Platform.UWP
 {
@@ -33,12 +33,28 @@ namespace Xamarin.Forms.Platform.UWP
 			self.FontWeight = font.FontAttributes.HasFlag(FontAttributes.Bold) ? FontWeights.Bold : FontWeights.Normal;
 		}
 
-		public static void ApplyFont(this Windows.UI.Xaml.Documents.TextElement self, Font font)
+		public static void ApplyFont(this Microsoft.UI.Xaml.Documents.TextElement self, Font font)
 		{
 			self.FontSize = font.UseNamedSize ? font.NamedSize.GetFontSize() : font.FontSize;
 			self.FontFamily = font.ToFontFamily();
 			self.FontStyle = font.FontAttributes.HasFlag(FontAttributes.Italic) ? FontStyle.Italic : FontStyle.Normal;
 			self.FontWeight = font.FontAttributes.HasFlag(FontAttributes.Bold) ? FontWeights.Bold : FontWeights.Normal;
+		}
+
+		internal static void ApplyFont(this TextBlock self, IFontElement element)
+		{
+			self.FontSize = element.FontSize;
+			self.FontFamily = element.FontFamily.ToFontFamily();
+			self.FontStyle = element.FontAttributes.HasFlag(FontAttributes.Italic) ? FontStyle.Italic : FontStyle.Normal;
+			self.FontWeight = element.FontAttributes.HasFlag(FontAttributes.Bold) ? FontWeights.Bold : FontWeights.Normal;
+		}
+
+		internal static void ApplyFont(this TextElement self, IFontElement element)
+		{
+			self.FontSize = element.FontSize;
+			self.FontFamily = element.FontFamily.ToFontFamily();
+			self.FontStyle = element.FontAttributes.HasFlag(FontAttributes.Italic) ? FontStyle.Italic : FontStyle.Normal;
+			self.FontWeight = element.FontAttributes.HasFlag(FontAttributes.Bold) ? FontWeights.Bold : FontWeights.Normal;
 		}
 
 		internal static void ApplyFont(this Control self, IFontElement element)
@@ -56,7 +72,7 @@ namespace Xamarin.Forms.Platform.UWP
 			switch (size)
 			{
 				case NamedSize.Default:
-					if(DefaultFontSize == double.NegativeInfinity)
+					if (DefaultFontSize == double.NegativeInfinity)
 					{
 						DefaultFontSize = (double)WApplication.Current.Resources["ControlContentThemeFontSize"];
 					}
@@ -112,28 +128,29 @@ namespace Xamarin.Forms.Platform.UWP
 
 		static string FindFontFamilyName(string fontFile)
 		{
-			try
-			{
-				var fontUri = new Uri(fontFile, UriKind.RelativeOrAbsolute);
+			throw new Win2DNotImplementedException();
+			//try
+			//{
+			//	var fontUri = new Uri(fontFile, UriKind.RelativeOrAbsolute);
 
-				// CanvasFontSet only supports ms-appx:// and ms-appdata:// font URIs
-				if (fontUri.IsAbsoluteUri && (fontUri.Scheme == "ms-appx" || fontUri.Scheme == "ms-appdata"))
-				{
-					using (var fontSet = new CanvasFontSet(fontUri))
-					{
-						if (fontSet.Fonts.Count != 0) 
-							return fontSet.GetPropertyValues(CanvasFontPropertyIdentifier.FamilyName).FirstOrDefault().Value;
-					}
-				}
+			//	// CanvasFontSet only supports ms-appx:// and ms-appdata:// font URIs
+			//	if (fontUri.IsAbsoluteUri && (fontUri.Scheme == "ms-appx" || fontUri.Scheme == "ms-appdata"))
+			//	{
+			//		using (var fontSet = new CanvasFontSet(fontUri))
+			//		{
+			//			if (fontSet.Fonts.Count != 0) 
+			//				return fontSet.GetPropertyValues(CanvasFontPropertyIdentifier.FamilyName).FirstOrDefault().Value;
+			//		}
+			//	}
 
-				return null;
-			}
-			catch(Exception ex)
-			{
-				// the CanvasFontSet constructor can throw an exception in case something's wrong with the font. It should not crash the app
-				Internals.Log.Warning("Font",$"Error loading font {fontFile}: {ex.Message}");
-				return null;
-			}
+			//	return null;
+			//}
+			//catch(Exception ex)
+			//{
+			//	// the CanvasFontSet constructor can throw an exception in case something's wrong with the font. It should not crash the app
+			//	Internals.Log.Warning("Font",$"Error loading font {fontFile}: {ex.Message}");
+			//	return null;
+			//}
 		}
 
 		static IEnumerable<string> GetAllFontPossibilities(string fontFamily)
