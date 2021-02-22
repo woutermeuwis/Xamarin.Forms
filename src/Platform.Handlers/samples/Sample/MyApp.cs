@@ -37,11 +37,16 @@ namespace Sample
 
 			verticalStack.Add(horizontalStack);
 
+			verticalStack.Add(new Entry());
+			verticalStack.Add(new Entry { Text= "Entry", TextColor = Color.DarkRed });
+			verticalStack.Add(new Entry { IsPassword = true, TextColor = Color.Black });
+
 			var slider = new Slider();
 			slider.ValueChanged += value => Console.WriteLine($"Slider value: {value:0.000}");
 			verticalStack.Add(slider);
 
 			verticalStack.Add(new Switch());
+
 			verticalStack.Add(new Switch() { OnColor = Color.Green });
 			verticalStack.Add(new Switch() { ThumbColor = Color.Yellow });
 			verticalStack.Add(new Switch() { OnColor = Color.Green, ThumbColor = Color.Yellow });
