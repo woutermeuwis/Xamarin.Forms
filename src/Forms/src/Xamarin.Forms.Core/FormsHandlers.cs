@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xamarin.Platform.Handlers;
 
 namespace Xamarin.Forms
@@ -18,6 +15,7 @@ namespace Xamarin.Forms
 			Xamarin.Platform.Registrar.Handlers.Register<Label, LabelHandler>();
 			Xamarin.Platform.Registrar.Handlers.Register(typeof(Switch), typeof(SwitchHandler));
 			Xamarin.Platform.Registrar.Handlers.Register(typeof(Slider), typeof(SliderHandler));
+			Platform.Registrar.Handlers.Register<Entry, EntryHandler>();
 		}
 	}
 }
