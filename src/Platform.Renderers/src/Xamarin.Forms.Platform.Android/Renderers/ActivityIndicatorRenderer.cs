@@ -13,13 +13,6 @@ namespace Xamarin.Forms.Platform.Android
 			AutoPackage = false;
 		}
 
-		[Obsolete("This constructor is obsolete as of version 2.5. Please use ActivityIndicatorRenderer(Context) instead.")]
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public ActivityIndicatorRenderer()
-		{
-			AutoPackage = false;
-		}
-
 		[PortHandler]
 		protected override AProgressBar CreateNativeControl()
 		{
