@@ -1,6 +1,6 @@
 ﻿namespace Xamarin.Platform
 {
-	public interface IButton : IView, IText
+	public interface IButton : IText
 	{
 		void Pressed();
 		void Released();

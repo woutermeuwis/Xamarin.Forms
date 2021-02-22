@@ -9,10 +9,6 @@ namespace Sample
 		public string Text { get; set; }
 		public Color TextColor { get; set; }
 
-		public FontAttributes FontAttributes => throw new NotImplementedException();
-		public string FontFamily => throw new NotImplementedException();
-		public double FontSize => throw new NotImplementedException();
-
 		public Action Pressed { get; set; }
 		public Action Released { get; set; }
 		public Action Clicked { get; set; }

@@ -7,7 +7,7 @@ namespace Xamarin.Platform.Handlers.DeviceTests
 {
 	public partial class LabelHandlerTests : HandlerTestBase<LabelHandler>
 	{
-		[Fact]
+		[Fact(DisplayName = "Background Color Initializes Correctly")]
 		public async Task BackgroundColorInitializesCorrectly()
 		{
 			var label = new LabelStub()
@@ -19,7 +19,7 @@ namespace Xamarin.Platform.Handlers.DeviceTests
 			await ValidateNativeBackgroundColor(label, Color.Blue);
 		}
 
-		[Fact]
+		[Fact(DisplayName = "Text Initializes Correctly")]
 		public async Task TextInitializesCorrectly()
 		{
 			var label = new LabelStub()
@@ -30,7 +30,7 @@ namespace Xamarin.Platform.Handlers.DeviceTests
 			await ValidatePropertyInitValue(label, () => label.Text, GetNativeText, label.Text);
 		}
 
-		[Fact]
+		[Fact(DisplayName = "Text Color Initializes Correctly")]
 		public async Task TextColorInitializesCorrectly()
 		{
 			var label = new LabelStub()
