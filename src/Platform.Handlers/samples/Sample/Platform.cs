@@ -26,7 +26,6 @@ namespace Sample
 			RegistrarHandlers.Handlers.Register<Xamarin.Forms.StackLayout, LayoutHandler>();
 		}
 
-
 		void RegisterLegacyRendererAgainstFormsControl()
 		{
 #if MONOANDROID && !NET6_0

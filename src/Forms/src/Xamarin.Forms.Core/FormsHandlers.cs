@@ -1,4 +1,7 @@
-﻿using Xamarin.Platform.Handlers;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using Xamarin.Platform.Handlers;
 
 namespace Xamarin.Forms
 {
@@ -9,7 +12,12 @@ namespace Xamarin.Forms
 		// And other scenarios
 		public static void InitHandlers()
 		{
-			Platform.Registrar.Handlers.Register(typeof(ActivityIndicator), typeof(ActivityIndicatorHandler));
+			Xamarin.Platform.Registrar.Handlers.Register<ActivityIndicator, ActivityIndicatorHandler>();
+			Xamarin.Platform.Registrar.Handlers.Register<Button, ButtonHandler>();
+			Xamarin.Platform.Registrar.Handlers.Register<Label, LabelHandler>();
+			Xamarin.Platform.Registrar.Handlers.Register<Switch, SwitchHandler>();
+      Xamarin.Platform.Registrar.Handlers.Register<HorizontalStackLayout, LayoutHandler>();
+      Xamarin.Platform.Registrar.Handlers.Register<VerticalStackLayout, LayoutHandler>();
 		}
 	}
 }
