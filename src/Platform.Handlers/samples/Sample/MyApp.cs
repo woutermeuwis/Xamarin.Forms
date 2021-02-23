@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using System;
+using Xamarin.Forms;
 using Xamarin.Platform;
 using Xamarin.Platform.Core;
 
@@ -36,7 +37,9 @@ namespace Sample
 
 			verticalStack.Add(horizontalStack);
 
-			verticalStack.Add(new Slider());
+			var slider = new Slider();
+			slider.ValueChanged += value => Console.WriteLine($"Slider value: {value:0.000}");
+			verticalStack.Add(slider);
 
 			verticalStack.Add(new Switch());
 
